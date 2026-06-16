@@ -1,0 +1,42 @@
+# --- Secrets & local state (NEVER commit) ---
+# Claude API key
+.env
+.env.*
+!.env.example
+# Facebook login profile (cookies/session)
+.fb_session/
+# personal config; share config.example.yaml instead
+config.yaml
+
+# --- Output ---
+results/
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+build/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# --- Virtualenvs ---
+venv/
+.venv/
+env/
+ENV/
+
+# --- Playwright ---
+.cache/
+playwright-report/
+
+# --- OS / editor cruft ---
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*~

@@ -1,0 +1,41 @@
+# Copy to config.yaml and edit. Every field is optional; CLI flags override these.
+
+# --- Search ---
+region: sfbay          # Craigslist region subdomain (sfbay, newyork, losangeles, sacramento, chicago, ...)
+max_price: 9000        # cheaper-is-better, but this is the hard ceiling
+min_price: 0
+sources:
+  - craigslist         # HTTP, fast, reliable, includes dealers
+  # - facebook         # Playwright, no login needed, ~24 listings/run
+  # - carscom          # Playwright dealer inventory — experimental, needs `headed: true`
+
+# --- Browser sources (facebook, carscom) ---
+fb_city: sanfrancisco  # Facebook Marketplace city slug (sanfrancisco, newyork, losangeles, ...)
+fb_scrolls: 40         # max scroll passes (stops early once no new cards load)
+fb_max_listings: 150   # cap FB listings per run (logged-in only; anonymous caps at ~24)
+fb_session_dir: .fb_session   # persistent login profile, created by: python -m carhunt --fb-login
+headed: false          # set true (or pass --headed) to beat Cloudflare on cars.com
+cars_zip: "94103"      # cars.com searches by ZIP
+cars_radius: 50
+
+# --- Buyer preferences (fed verbatim into Claude's scoring prompt) ---
+preferences: >
+  I'm a car enthusiast hunting for something cheap but actually cool and interesting —
+  not a boring appliance. It must NOT be a money pit: favor models with a known-reliable
+  reputation and avoid ones famous for expensive failures at this mileage. A convertible /
+  roadster is a big plus. Cheaper is better, and lower mileage is better. I care about cheap
+  running and insurance costs. Manual transmission is fine but not required.
+
+# --- Scoring ---
+model: claude-opus-4-8 # switch to claude-sonnet-4-6 or claude-haiku-4-5 for cheaper bulk runs
+max_to_score: 60       # cap LLM calls per run (cost control)
+fetch_descriptions: true
+concurrency: 5
+min_overall_to_show: 0       # e.g. 50 to only surface decent matches
+serious_only: true           # drop project / non-running / kit / restoration cars
+exclude_placeholder_prices: true  # drop listings with fake/placeholder prices ($1, etc.)
+min_realistic_price: 300     # local floor: skip obvious $1/$17 junk before scoring
+
+# --- Output ---
+results_dir: results
+top_n_console: 20

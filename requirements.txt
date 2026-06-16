@@ -1,0 +1,7 @@
+anthropic>=0.69
+requests>=2.32
+beautifulsoup4>=4.12
+PyYAML>=6.0
+rich>=13.7
+python-dotenv>=1.0
+playwright>=1.44          # for facebook (and experimental cars.com); run: playwright install chromium
