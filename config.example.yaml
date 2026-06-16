@@ -15,8 +15,9 @@ fb_scrolls: 40         # max scroll passes (stops early once no new cards load)
 fb_max_listings: 150   # cap FB listings per run (logged-in only; anonymous caps at ~24)
 fb_session_dir: .fb_session   # persistent login profile, created by: python -m carhunt --fb-login
 headed: false          # set true (or pass --headed) to beat Cloudflare on cars.com
-cars_zip: "94103"      # cars.com searches by ZIP
+cars_zip: "94103"      # dealer sites (carscom/autotrader/cargurus) search by ZIP
 cars_radius: 50
+dealer_pages: 1000     # ceiling on result pages per dealer site (~50 each; stops early when a page adds nothing new)
 
 # --- Buyer preferences (fed verbatim into Claude's scoring prompt) ---
 preferences: >

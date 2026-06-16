@@ -21,8 +21,16 @@ table plus a saved Markdown + JSON report.
 |---|---|---|
 | **Craigslist** | HTTP JSON API (`sapi.craigslist.org`) | ✅ Reliable. Includes private sellers **and dealers**. ~360 listings/region. |
 | **Facebook Marketplace** | Playwright | ✅ Works. Anonymous = ~24 listings/run; **log in once to unlock 150+** (see below). No mileage in the grid. |
-| **Cars.com** | Playwright dealer inventory | ⚠️ Experimental. Behind Cloudflare — clears only intermittently headless; **run `--headed`** on your own machine for reliability. Fails safe (skips) if blocked. |
-| **CarGurus / AutoTrader / TrueCar** | — | ❌ Hard Cloudflare/bot walls; not viable over HTTP or headless. Would need headed mode + stealth tooling or a paid scraping API. |
+| **Cars.com** | Playwright dealer inventory | ⚠️ Experimental. Behind Cloudflare — **run `--headed`**; fails safe (skips) if blocked. |
+| **AutoTrader** | Playwright dealer inventory | ⚠️ Experimental, **headed only**. PerimeterX bot-wall; may still flake. Tries JSON-LD then a DOM heuristic; selectors may need tweaking. |
+| **CarGurus** | Playwright dealer inventory | ⚠️ Experimental, **headed only**. Hard bot-wall (403 headless). Same two-strategy extraction as AutoTrader. |
+| **TrueCar** | — | ❌ Not implemented; hard bot-wall. A paid scraping API is the reliable route for the locked-down dealer sites. |
+
+The three dealer sites (`carscom`, `autotrader`, `cargurus`) all key off `cars_zip` / `cars_radius` and need `--headed`:
+
+```bash
+python -m carhunt --sources craigslist,carscom,autotrader,cargurus --headed
+```
 
 Enable sources with `--sources` or the `sources:` list in `config.yaml`:
 

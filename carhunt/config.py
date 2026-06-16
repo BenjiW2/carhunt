@@ -26,8 +26,9 @@ class Config:
     fb_max_listings: int = 150       # cap listings gathered from FB per run
     fb_session_dir: str = ".fb_session"  # persistent login profile (created by --fb-login)
     headed: bool = False             # show the real browser (needed to beat Cloudflare on cars.com)
-    cars_zip: str = "94103"          # cars.com searches by ZIP
-    cars_radius: int = 50            # cars.com search radius (miles)
+    cars_zip: str = "94103"          # dealer sites search by ZIP
+    cars_radius: int = 50            # dealer search radius (miles)
+    dealer_pages: int = 1000         # max result pages per dealer site (a ceiling — stops early when a page adds nothing new)
 
     # --- buyer preferences (free text, fed verbatim into the scoring prompt) ---
     preferences: str = (

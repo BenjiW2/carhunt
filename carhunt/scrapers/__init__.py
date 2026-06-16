@@ -7,12 +7,14 @@ from .craigslist import CraigslistScraper
 from .facebook import FacebookScraper
 from .carscom import CarsComScraper
 from .autotrader import AutoTraderScraper
+from .cargurus import CarGurusScraper
 
 REGISTRY: dict[str, type[Scraper]] = {
     "craigslist": CraigslistScraper,
     "facebook": FacebookScraper,
     "carscom": CarsComScraper,
     "autotrader": AutoTraderScraper,
+    "cargurus": CarGurusScraper,
 }
 
 

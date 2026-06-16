@@ -87,23 +87,24 @@ def run(config: Config) -> list[ScoredListing]:
     print("• scoring with Claude…")
     scored = Scorer(config).score_all(candidates)
 
-    # Drop what the buyer explicitly doesn't want: fake prices and non-serious cars.
-    dropped_price = dropped_serious = 0
-    kept: list[ScoredListing] = []
-    for s in scored:
-        if config.exclude_placeholder_prices and s.score.price_is_placeholder:
-            dropped_price += 1
-            continue
-        if config.serious_only and not s.score.is_serious_car:
-            dropped_serious += 1
-            continue
-        kept.append(s)
+    # Return EVERYTHING scored, sorted — the report decides what to highlight vs.
+    # list lower down (placeholder/non-serious/below-threshold). The counts below
+    # are informational only.
+    dropped_price = sum(
+        1 for s in scored if config.exclude_placeholder_prices and s.score.price_is_placeholder
+    )
+    dropped_serious = sum(
+        1
+        for s in scored
+        if config.serious_only
+        and not s.score.is_serious_car
+        and not s.score.price_is_placeholder
+    )
     if dropped_price or dropped_serious:
         print(
-            f"• dropped {dropped_price} placeholder-price and "
-            f"{dropped_serious} non-serious (project/kit/non-running) listings"
+            f"• flagged {dropped_price} placeholder-price and "
+            f"{dropped_serious} non-serious listings (kept in the report, not recommended)"
         )
 
-    kept = [s for s in kept if s.score.overall >= config.min_overall_to_show]
-    kept.sort(key=lambda s: s.score.overall, reverse=True)
-    return kept
+    scored.sort(key=lambda s: s.score.overall, reverse=True)
+    return scored

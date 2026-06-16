@@ -34,10 +34,13 @@ are NOT what the buyer wants no matter how cool — score overall below 25.
 - is_serious_car is TRUE only for complete, running, road-ready cars.
 
 How to score (every numeric field is 0-100, higher is better):
-- cool_factor: Would an enthusiast actually want this? Reward interesting, characterful, \
-fun-to-drive cars (e.g. Miata/MX-5, BMW Z3/Z4, Boxster, MR2, S2000, old Mustangs, \
-Mercedes SLK, factory roadsters). Penalize generic appliances (base econoboxes, beige \
-sedans) unless there's something genuinely notable.
+- cool_factor: Be DISCERNING and stingy — most cars are not cool. Reserve 80+ for genuinely \
+sought-after enthusiast cars (E46 M3, S2000, Boxster/Cayman, 350Z/370Z, RX-7/RX-8, Supra, \
+Datsun 240Z, classic muscle, real driver's cars). A Miata/MX-5 is fun and beloved but common \
+and humble — about 65-75, not 85. Hot hatches and warm coupes (GTI, Civic Si, Mustang V6) sit \
+50-68. Fashion/city cars and badge-engineered crossovers (Fiat 500, base MINI, Beetle, Mercedes \
+GLA/Infiniti QX30) are NOT enthusiast-cool — 30-50 even if likeable. Generic appliances (beige \
+sedans, econoboxes, minivans, commuter crossovers) are 15-40.
 - reliability: Use the SPECIFIC model's real-world reputation AND the car's CURRENT condition. \
 Reward known-bulletproof drivetrains. CRITICAL: if the car needs rebuilding, isn't running, or \
 needs major mechanical work (engine, transmission, full restoration), reliability is 0-10 — a \
@@ -47,15 +50,20 @@ BMW N47 timing chains, R56 Mini timing-chain/turbo issues, VW/Audi DSG and carbo
 Range Rover air suspension/electronics, older German electrical gremlins, CVT-prone models, \
 head-gasket-prone engines). Be concrete in key_risks.
 - value: Is the price good for the car, year, and mileage? Cheaper-for-what-you-get scores \
-higher. A clean low-mile example at a fair price beats a tired one that's only slightly cheaper.
+higher. The buyer is price-sensitive: a car near the TOP of the budget (e.g. $8-9k when the cap \
+is $9k) starts at a disadvantage and must be exceptional to earn a high value score; cars in the \
+$2-5k range with real appeal should score higher on value.
 - running_cost: Cheapness to insure, fuel, and maintain. Small reliable engines and cars with \
 cheap, available parts score high; thirsty V8s, exotic/German parts, and high-insurance-group \
 cars score lower.
 - is_convertible: true for convertibles, roadsters, cabriolets, targas, spiders.
 - recommended: true only if you'd tell this specific buyer it's worth contacting the seller.
-- overall: Your holistic judgement for THIS buyer, weighting their brief. A convertible is a \
-plus. Money-pit risk should pull this down hard even if the car is cool. Anchors: 80+ = chase \
-it today; 60-79 = solid candidate; 40-59 = mediocre; below 40 = skip.
+- overall: Your holistic judgement for THIS buyer, weighting their brief. PRICE MATTERS A LOT — \
+cheaper is materially better, so weight value heavily: a car at the top of the budget should NOT \
+outrank a genuinely cool, reliable car costing half as much unless it's clearly superior. A \
+convertible is a plus but does not override price or money-pit risk. Money-pit risk pulls this \
+down hard even if the car is cool. Anchors: 80+ = chase it today (rare — cheap, cool, AND \
+reliable); 60-79 = solid candidate; 40-59 = mediocre; below 40 = skip.
 
 Watch for traps: an implausibly low price (e.g. $1, $17, a few hundred dollars for a late-model \
 car) is almost always a placeholder, typo, or scam — the real figure is often buried in the title \

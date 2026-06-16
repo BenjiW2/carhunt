@@ -25,6 +25,12 @@ from .base import Scraper
 ITEM_RE = re.compile(r"/marketplace/item/(\d+)")
 PRICE_RE = re.compile(r"\$([\d,]+)")
 MILEAGE_RE = re.compile(r"[Dd]riven\s+([\d,]+)\s*miles|([\d,]{4,6})\s*miles")
+# The logged-in detail page exposes a "About this vehicle" specs block followed
+# by the seller's free-text description; grab from there to the seller card.
+DETAILS_RE = re.compile(
+    r"About this vehicle(.*?)(?:Seller information|Seller details|Today's picks|Related)",
+    re.S,
+)
 
 
 class FacebookScraper(Scraper):
@@ -54,7 +60,9 @@ class FacebookScraper(Scraper):
         )
         listings: dict[str, Listing] = {}
 
-        with persistent_context(config.fb_session_dir, headed=config.headed) as page:
+        # Facebook works fine headless and login persists, so never pop a window
+        # for it — even when --headed is set for the Cloudflare dealer sites.
+        with persistent_context(config.fb_session_dir, headed=False) as page:
             page.goto(url, wait_until="domcontentloaded", timeout=45000)
             wait_past_challenge(page)
             page.wait_for_timeout(4000)
@@ -90,16 +98,17 @@ class FacebookScraper(Scraper):
         from the "Driven N miles" text (works logged-in or anonymous); the full
         seller description needs a logged-in session.
         """
-        with persistent_context(config.fb_session_dir, headed=config.headed) as page:
+        with persistent_context(config.fb_session_dir, headed=False) as page:  # FB stays headless
             page.set_default_timeout(60000)
             with progress_bar("  facebook: detail pages", len(listings)) as advance:
                 for lst in listings:
                     try:
-                        page.goto(lst.url, wait_until="commit", timeout=60000)
-                        page.wait_for_timeout(2500)
+                        page.goto(lst.url, wait_until="domcontentloaded", timeout=60000)
+                        page.wait_for_timeout(3500)
                         body = page.inner_text("body")
                         if (mi := self._extract_mileage(body)) is not None:
                             lst.mileage = mi
+                        lst.description = self._extract_details(body)
                     except Exception:  # noqa: BLE001 - one bad page shouldn't stop the batch
                         pass
                     advance()
@@ -114,6 +123,15 @@ class FacebookScraper(Scraper):
             return int(raw.replace(",", ""))
         except (ValueError, AttributeError):
             return None
+
+    @staticmethod
+    def _extract_details(body: str) -> str | None:
+        """Specs block + seller's free-text description (where 'doesn't run' lives)."""
+        m = DETAILS_RE.search(body)
+        if not m:
+            return None
+        text = re.sub(r"\s*\n\s*", " · ", m.group(1)).strip(" ·")
+        return text[:1200] or None
 
     def _harvest(self, page, listings: dict[str, Listing]) -> None:
         for a in page.query_selector_all("a[href*='/marketplace/item/']"):
